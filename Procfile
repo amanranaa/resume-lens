@@ -1,0 +1,2 @@
+web: gunicorn --workers 4 --timeout 120 --bind 0.0.0.0:$PORT app:app
+release: flask db init; flask init_db

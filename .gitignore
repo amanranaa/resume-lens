@@ -1,0 +1,230 @@
+# ==============================================================================
+# ENVIRONMENT & SECRETS (CRITICAL - NEVER COMMIT!)
+# ==============================================================================
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+.env.development
+*.pem
+*.key
+*.p12
+secrets/
+credentials/
+credentials.json
+service-account-key.json
+
+# ==============================================================================
+# PYTHON & VIRTUAL ENVIRONMENTS
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+python-env/
+venv/
+ENV/
+env/
+.venv
+.venv/
+env.bak/
+venv.bak/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==============================================================================
+# DATABASE (NEVER COMMIT DATA!)
+# ==============================================================================
+*.db
+*.sqlite
+*.sqlite3
+instance/
+instance/*
+!instance/.gitkeep
+resumelens.db
+database.db
+*.backup
+*.sql
+*.dump
+pgdump.sql
+
+# ==============================================================================
+# IDE & EDITOR CONFIGURATION
+# ==============================================================================
+.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+.idea/*
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
+.project
+.pydevproject
+.settings/
+*.sublime-settings
+
+# ==============================================================================
+# LOGS & DEBUG FILES
+# ==============================================================================
+*.log
+*.log.*
+logs/
+debug/
+error.log
+app.log
+access.log
+debug.log
+*.stackdump
+
+# ==============================================================================
+# FLASK SPECIFIC
+# ==============================================================================
+.webassets-cache
+.cache
+instance/
+__pycache__
+.pytest_cache/
+flask_session/
+
+# ==============================================================================
+# TESTING & COVERAGE
+# ==============================================================================
+.pytest_cache/
+.coverage
+.coverage.*
+coverage/
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+*.cover
+
+# ==============================================================================
+# DOCKER & CONTAINERIZATION
+# ==============================================================================
+.dockerignore
+.docker/
+docker-compose.override.yml
+.docker-compose.override.yml
+
+# ==============================================================================
+# OPERATING SYSTEM
+# ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.AppleDouble
+.LSOverride
+
+# ==============================================================================
+# TEMPORARY & BUILD FILES
+# ==============================================================================
+*.tmp
+*.temp
+temp/
+tmp/
+*.whl
+*.tar.gz
+*.zip
+*.rar
+
+# ==============================================================================
+# NODE & NPM (IF USING FRONTEND TOOLS)
+# ==============================================================================
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+.npm/
+
+# ==============================================================================
+# DEPENDENCY MANAGEMENT
+# ==============================================================================
+poetry.lock
+Pipfile.lock
+
+# ==============================================================================
+# CLOUD & DEPLOYMENT ARTIFACTS
+# ==============================================================================
+.serverless/
+.webpack/
+.terraform/
+*.tfstate
+*.tfstate.*
+deployment/dist/
+
+# ==============================================================================
+# SECURITY & CREDENTIALS
+# ==============================================================================
+# Private keys
+*.pem
+*.key
+*.pub
+*.p7b
+*.pfx
+*.cert
+*.crt
+# OAuth tokens
+oauth_tokens
+.oAuth2
+# API Keys
+api_keys.txt
+# SSH
+.ssh/
+id_rsa*
+known_hosts
+
+# ==============================================================================
+# BROWSER CACHE & LOCAL FILES
+# ==============================================================================
+.cache/
+.eslintcache
+.stylelintcache
+
+# ==============================================================================
+# PROJECT SPECIFIC
+# ==============================================================================
+# Resume uploads (if stored locally)
+uploads/
+resumes/
+*.pdf
+# Generated files
+dist/
+build/
+# VS Code
+.vscode/
+
+venv/
+.venv/
+__pycache__/
+instance/
+.env

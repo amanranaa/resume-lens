@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeLens — AI Resume Analyzer</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<!-- Mammoth for DOCX -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<!-- Background blobs -->
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar-custom">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <a href="#" class="navbar-brand-custom">
+        <div class="logo-icon">
+          <i class="fas fa-file-search"></i>
+        </div>
+        Resume<span class="gradient-text">Lens</span>
+      </a>
+      <div class="d-flex align-items-center gap-2">
+        <a href="#analyzer" class="btn btn-sm d-none d-md-inline-flex" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--text-primary);padding:0.5rem 1.2rem;border-radius:10px;">
+          <i class="fas fa-rocket me-1"></i> Get Started
+        </a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="container" id="hero">
+  <div class="hero">
+    <h1>Resume Analyzer powered by <span class="gradient-text">AI</span></h1>
+    <p>Get instant ATS optimization tips. Analyze how well your resume matches the job description and get personalized recommendations to increase your chances of landing the interview.</p>
+    
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">Resumes Analyzed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">4.9/5</div>
+        <div class="stat-label">User Rating</div>
+      </div>
+    </div>
+    
+    <a href="#analyzer" class="cta-button">
+      <i class="fas fa-magic"></i> Start Analyzing
+    </a>
+  </div>
+</div>
+
+<!-- Main Analyzer Section -->
+<div class="container" id="analyzer" style="margin-top:4rem;margin-bottom:4rem;">
+  <div style="max-width:900px;margin:0 auto;">
+    <!-- Resume Upload -->
+    <div class="glass-card" style="margin-bottom:2rem;">
+      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.5rem;">
+        <div style="width:40px;height:40px;background:var(--gradient-2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;">
+          <i class="fas fa-file"></i>
+        </div>
+        <h3 style="margin:0;font-size:1.3rem;font-weight:600;">Step 1: Upload Your Resume</h3>
+      </div>
+      
+      <div id="dropzone" class="dropzone">
+        <div class="dropzone-icon">
+          <i class="fas fa-cloud-arrow-up"></i>
+        </div>
+        <p class="dropzone-title">Drop your resume here or click to browse</p>
+        <p class="dropzone-text">Supports PDF and DOCX files up to 5MB</p>
+      </div>
+      <input type="file" id="fileInput" accept=".pdf,.docx" />
+      
+      <div class="file-preview" id="filePreview">
+        <div class="file-preview-icon">
+          <i class="fas fa-file-pdf"></i>
+        </div>
+        <div class="file-preview-info">
+          <div class="file-preview-name" id="fileName">resume.pdf</div>
+          <div class="file-preview-size" id="fileSize">2.5 MB</div>
+        </div>
+        <button class="file-remove" id="fileRemove" title="Remove file">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Job Description -->
+    <div class="glass-card">
+      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.5rem;">
+        <div style="width:40px;height:40px;background:var(--gradient-3);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <h3 style="margin:0;font-size:1.3rem;font-weight:600;">Step 2: Paste the Job Description</h3>
+      </div>
+      
+      <textarea id="jdTextarea" placeholder="Copy and paste the complete job description here..." style="width:100%;min-height:200px;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--glass-border);border-radius:12px;padding:1rem;font-family:'Inter',sans-serif;resize:vertical;"></textarea>
+      
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;">
+        <small style="color:var(--text-muted);">
+          <span id="jdCharCount">0</span> characters
+        </small>
+        <button id="loadSample" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--text-primary);padding:0.5rem 1rem;border-radius:10px;cursor:pointer;font-size:0.9rem;">
+          <i class="fas fa-wand-magic-sparkles me-1"></i> Load Sample JD
+        </button>
+      </div>
+    </div>
+    
+    <!-- Analyze Button -->
+    <div style="display:flex;gap:1rem;margin-top:2rem;">
+      <button id="analyzeBtn" class="cta-button" disabled style="width:100%;padding:1.2rem;font-size:1.1rem;">
+        <span class="btn-content"><i class="fas fa-upload"></i> Upload your resume to continue</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Results Section -->
+<div class="container" id="dashboard" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;margin-bottom:4rem;">
+    <!-- Score Cards -->
+    <div class="scores-grid" style="margin-bottom:2rem;">
+      <div class="score-card">
+        <div class="score-badge" id="atsBadge">Calculating...</div>
+        <div class="score-circle">
+          <svg viewBox="0 0 150 150">
+            <defs>
+              <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <circle class="bg-ring" cx="75" cy="75" r="65"/>
+            <circle class="progress-ring" id="atsRing" cx="75" cy="75" r="65" style="stroke:url(#scoreGradient);"/>
+          </svg>
+          <div class="score-value">
+            <div class="number" id="atsScore">0</div>
+            <div class="label">ATS Score</div>
+          </div>
+        </div>
+        <h4>Overall Match</h4>
+        <p class="subtitle">ATS Compatibility Score</p>
+      </div>
+      
+      <div class="score-card">
+        <div class="score-badge" id="atsBadge">Calculating...</div>
+        <div class="score-circle">
+          <svg viewBox="0 0 150 150">
+            <circle class="bg-ring" cx="75" cy="75" r="65"/>
+            <circle class="progress-ring" id="keywordRing" cx="75" cy="75" r="65" style="stroke:url(#scoreGradient);"/>
+          </svg>
+          <div class="score-value">
+            <div class="number" id="keywordScore">0</div>
+            <div class="label">Match %</div>
+          </div>
+        </div>
+        <h4>Keyword Match</h4>
+        <p class="subtitle">Relevance to job description</p>
+        <div class="mini-stat">
+          <div class="mini-stat-icon" style="background:var(--gradient-3);">
+            <i class="fas fa-check"></i>
+          </div>
+          <div>
+            <strong id="matchedCount">0</strong>
+            <small style="color:var(--text-muted);">of <span id="totalCount">0</span> keywords</small>
+          </div>
+        </div>
+      </div>
+      
+      <div class="score-card">
+        <div class="score-badge" id="atsBadge">Calculating...</div>
+        <div class="score-circle">
+          <svg viewBox="0 0 150 150">
+            <circle class="bg-ring" cx="75" cy="75" r="65"/>
+            <circle class="progress-ring" id="skillsRing" cx="75" cy="75" r="65" style="stroke:url(#scoreGradient);"/>
+          </svg>
+          <div class="score-value">
+            <div class="number" id="skillsScore">0</div>
+            <div class="label">Match %</div>
+          </div>
+        </div>
+        <h4>Skills Alignment</h4>
+        <p class="subtitle">Technical + soft skills</p>
+        <div class="mini-stat">
+          <div class="mini-stat-icon" style="background:var(--gradient-2);">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div>
+            <strong id="skillsMatched">0</strong>
+            <small style="color:var(--text-muted);">skills matched</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="glass-card mt-4">
+      <div class="result-tabs">
+        <button class="result-tab active" data-tab="overview"><i class="fas fa-chart-pie"></i> Overview</button>
+        <button class="result-tab" data-tab="keywords"><i class="fas fa-tags"></i> Keywords</button>
+        <button class="result-tab" data-tab="skills"><i class="fas fa-bolt"></i> Skills</button>
+        <button class="result-tab" data-tab="sections"><i class="fas fa-list-check"></i> Sections</button>
+        <button class="result-tab" data-tab="recommendations"><i class="fas fa-lightbulb"></i> AI Tips</button>
+      </div>
+      
+      <!-- Overview Tab -->
+      <div class="tab-content active" id="tab-overview">
+        <div class="charts-row">
+          <div>
+            <div class="section-divider"><i class="fas fa-chart-radar"></i> Analysis Breakdown</div>
+            <div class="chart-container">
+              <canvas id="radarChart"></canvas>
+            </div>
+          </div>
+          <div>
+            <div class="section-divider"><i class="fas fa-balance-scale"></i> Match Distribution</div>
+            <div class="chart-container">
+              <canvas id="doughnutChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section-divider"><i class="fas fa-star"></i> Resume Strengths</div>
+        <div id="strengthsList"></div>
+        
+        <div class="section-divider"><i class="fas fa-triangle-exclamation"></i> Areas of Improvement</div>
+        <div id="improvementsList"></div>
+      </div>
+      
+      <!-- Keywords Tab -->
+      <div class="tab-content" id="tab-keywords">
+        <div class="section-divider"><i class="fas fa-check-circle"></i> Matched Keywords</div>
+        <div class="keyword-cloud" id="matchedKeywords"></div>
+        
+        <div class="section-divider mt-4"><i class="fas fa-circle-xmark"></i> Missing Keywords (Add these to your resume)</div>
+        <div class="keyword-cloud" id="missingKeywords"></div>
+      </div>
+      
+      <!-- Skills Tab -->
+      <div class="tab-content" id="tab-skills">
+        <div class="section-divider"><i class="fas fa-code"></i> Technical Skills</div>
+        <div id="technicalSkills"></div>
+        
+        <div class="section-divider mt-4"><i class="fas fa-users"></i> Soft Skills</div>
+        <div id="softSkills"></div>
+      </div>
+      
+      <!-- Sections Tab -->
+      <div class="tab-content" id="tab-sections">
+        <div class="section-divider"><i class="fas fa-file-lines"></i> Resume Sections Detected</div>
+        <div class="section-status-grid" id="sectionStatus"></div>
+      </div>
+      
+      <!-- Recommendations Tab -->
+      <div class="tab-content" id="tab-recommendations">
+        <div class="section-divider"><i class="fas fa-lightbulb"></i> AI-Powered Recommendations</div>
+        <div id="recommendationsList"></div>
+        
+        <div class="section-divider mt-4"><i class="fas fa-clipboard-check"></i> Your Action Plan</div>
+        <div id="actionPlan"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Analyzing Overlay -->
+<div class="analyzing-overlay" id="analyzingOverlay">
+  <div class="analyzing-spinner"></div>
+  <div class="analyzing-text">
+    Analyzing Your Resume...
+    <small>This may take a few seconds</small>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="container footer-custom">
+  <p>
+    Built with Flask 
+  </p>
+</footer>
+
+<script src="static\js\script.js"></script>
+</body>
+</html>
